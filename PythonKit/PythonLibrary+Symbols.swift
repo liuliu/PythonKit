@@ -20,6 +20,7 @@
 
 @usableFromInline
 typealias PyObjectPointer = UnsafeMutableRawPointer
+typealias PyThreadStatePointer = UnsafeMutableRawPointer
 typealias PyMethodDefPointer = UnsafeMutableRawPointer
 typealias PyCCharPointer = UnsafePointer<Int8>
 typealias PyBinaryOperation =
@@ -55,6 +56,12 @@ let PyImport_ImportModule: @convention(c) (
 
 let PyEval_GetBuiltins: @convention(c) () -> PyObjectPointer =
     PythonLibrary.loadSymbol(name: "PyEval_GetBuiltins")
+
+let PyEval_SaveThread: @convention(c) () -> PyThreadStatePointer =
+    PythonLibrary.loadSymbol(name: "PyEval_SaveThread")
+
+let PyEval_RestoreThread: @convention(c) (PyThreadStatePointer) -> Void =
+    PythonLibrary.loadSymbol(name: "PyEval_RestoreThread")
 
 let PyRun_SimpleString: @convention(c) (PyCCharPointer) -> Void =
     PythonLibrary.loadSymbol(name: "PyRun_SimpleString")
