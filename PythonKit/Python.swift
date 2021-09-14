@@ -2044,3 +2044,23 @@ extension PythonClass : PythonConvertible {
         typeObject
     }
 }
+
+//===--------------------------------------------------------------------------===//
+// PythonThreadState - release GIL such that Swift can make progress independently.
+//===--------------------------------------------------------------------------===//
+
+public struct PythonThreadState {
+  var threadState: PyThreadStatePointer
+}
+
+extension PythonInterface {
+  public func saveThread() -> PythonThreadState {
+    return PythonThreadState(threadState: PyEval_SaveThread())
+  }
+}
+
+extension PythonThreadState {
+  public func restore() {
+    PyEval_RestoreThread(threadState)
+  }
+}
